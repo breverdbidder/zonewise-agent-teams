@@ -35,364 +35,132 @@
     --shadow: 0 2px 8px rgba(0,0,0,0.06);
     --shadow-hover: 0 4px 16px rgba(0,0,0,0.1);
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-900); line-height: 1.65; }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--gray-50);
-    color: var(--gray-900);
-    line-height: 1.65;
-  }
-
-  /* ─── Header ─── */
   .header {
     background: linear-gradient(135deg, #0D1B2A 0%, var(--navy) 50%, var(--navy-light) 100%);
-    color: white;
-    padding: 52px 24px 44px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
+    color: white; padding: 52px 24px 44px; text-align: center; position: relative; overflow: hidden;
   }
-  .header::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--green), var(--blue), var(--green));
-  }
-  .header .badge {
-    display: inline-block;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
-    padding: 5px 16px;
-    border-radius: 20px;
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-    margin-bottom: 18px;
-    text-transform: uppercase;
-  }
-  .header h1 {
-    font-size: 2rem;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    margin-bottom: 10px;
-  }
-  .header p {
-    font-size: 1rem;
-    opacity: 0.8;
-    max-width: 560px;
-    margin: 0 auto;
-  }
+  .header::after { content:''; position:absolute; bottom:0; left:0; right:0; height:4px; background:linear-gradient(90deg,var(--green),var(--blue),var(--green)); }
+  .header .badge { display:inline-block; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); padding:5px 16px; border-radius:20px; font-size:0.78rem; font-weight:600; letter-spacing:1px; margin-bottom:18px; text-transform:uppercase; }
+  .header h1 { font-size:2rem; font-weight:800; letter-spacing:-0.5px; margin-bottom:10px; }
+  .header p { font-size:1rem; opacity:0.8; max-width:560px; margin:0 auto; }
 
-  /* ─── Progress ─── */
-  .progress-wrap {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: white;
-    border-bottom: 1px solid var(--gray-200);
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-  .progress-bar {
-    flex: 1;
-    background: var(--gray-200);
-    height: 8px;
-    border-radius: 4px;
-    overflow: hidden;
-  }
-  .progress-fill {
-    background: linear-gradient(90deg, var(--green), var(--blue));
-    height: 100%;
-    width: 0%;
-    transition: width 0.4s ease;
-    border-radius: 4px;
-  }
-  .progress-label {
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: var(--gray-600);
-    white-space: nowrap;
-  }
+  .progress-wrap { position:sticky; top:0; z-index:100; background:white; border-bottom:1px solid var(--gray-200); padding:10px 20px; display:flex; align-items:center; gap:14px; }
+  .progress-bar { flex:1; background:var(--gray-200); height:8px; border-radius:4px; overflow:hidden; }
+  .progress-fill { background:linear-gradient(90deg,var(--green),var(--blue)); height:100%; width:0%; transition:width 0.4s ease; border-radius:4px; }
+  .progress-label { font-size:0.82rem; font-weight:600; color:var(--gray-600); white-space:nowrap; }
 
-  /* ─── Main ─── */
-  .container {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 28px 20px 80px;
-  }
+  .container { max-width:760px; margin:0 auto; padding:28px 20px 80px; }
 
-  /* ─── Phase Header ─── */
-  .phase {
-    margin-top: 36px;
-    margin-bottom: 16px;
-    padding: 14px 20px;
-    border-radius: var(--radius);
-    font-weight: 700;
-    font-size: 1.05rem;
+  .phase { margin-top:36px; margin-bottom:16px; padding:14px 20px; border-radius:var(--radius); font-weight:700; font-size:1.05rem; display:flex; align-items:center; gap:10px; }
+  .phase-wsl { background:var(--blue-bg); border-left:4px solid var(--blue-border); color:var(--navy); }
+  .phase-tmux { background:var(--green-bg); border-left:4px solid var(--green-border); color:#1B5E20; }
+  .phase-claude { background:var(--orange-bg); border-left:4px solid var(--orange-border); color:var(--orange); }
+  .phase-launch { background:var(--purple-bg); border-left:4px solid var(--purple-border); color:#6A1B9A; }
+  .phase-verify { background:var(--red-bg); border-left:4px solid var(--red-border); color:var(--red); }
+
+  .step { background:white; border:1px solid var(--gray-200); border-radius:var(--radius); margin-bottom:12px; box-shadow:var(--shadow); transition:border-color 0.2s,box-shadow 0.2s; overflow:hidden; }
+  .step:hover { border-color:var(--gray-300); box-shadow:var(--shadow-hover); }
+  .step.done { border-left:4px solid var(--green); }
+  .step.done .step-title { color:var(--gray-400); text-decoration:line-through; }
+
+  .step-header { display:flex; align-items:flex-start; gap:12px; padding:18px 22px 0; cursor:pointer; user-select:none; }
+  .check { width:24px; height:24px; min-width:24px; border:2px solid var(--gray-300); border-radius:7px; cursor:pointer; display:flex; align-items:center; justify-content:center; margin-top:1px; transition:all 0.15s; background:white; font-size:0; }
+  .check:hover { border-color:var(--blue); background:var(--blue-bg); }
+  .check.on { background:var(--green); border-color:var(--green); font-size:14px; color:white; }
+  .check.on::after { content:'✓'; font-weight:800; }
+
+  .step-num { background:var(--navy); color:white; width:26px; height:26px; min-width:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.78rem; font-weight:700; }
+  .step-body { flex:1; }
+  .step-title { font-weight:600; font-size:1rem; margin-bottom:2px; transition:all 0.2s; }
+  .step-desc { font-size:0.88rem; color:var(--gray-600); }
+  .step-detail { padding:6px 22px 18px 62px; }
+
+  .cb { background:#1a1a2e; border-radius:8px; margin:10px 0 6px; overflow:hidden; font-family:'JetBrains Mono',monospace; }
+  .cb-bar { display:flex; justify-content:space-between; align-items:center; padding:7px 14px; background:rgba(255,255,255,0.04); border-bottom:1px solid rgba(255,255,255,0.06); }
+  .cb-bar .dots { display:flex; gap:5px; }
+  .cb-bar .dot { width:9px; height:9px; border-radius:50%; }
+  .cb-bar .dot.r { background:#FF5F56; }
+  .cb-bar .dot.y { background:#FFBD2E; }
+  .cb-bar .dot.g { background:#27C93F; }
+  .cb-bar .tag { font-size:0.7rem; color:#666; font-family:'DM Sans',sans-serif; font-weight:500; letter-spacing:0.5px; }
+  .cpbtn { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); color:#999; padding:3px 12px; border-radius:5px; cursor:pointer; font-size:0.72rem; font-family:'DM Sans',sans-serif; font-weight:500; transition:all 0.2s; }
+  .cpbtn:hover { background:rgba(255,255,255,0.18); color:#fff; }
+  .cpbtn.ok { background:var(--green); color:white; border-color:var(--green); }
+  .cb pre { padding:12px 16px; overflow-x:auto; font-size:0.84rem; line-height:1.6; color:#E8E8E8; white-space:pre; }
+  .cmt { color:#6A9955; }
+  .str { color:#CE9178; }
+  .kw { color:#569CD6; }
+  .fn { color:#DCDCAA; }
+  .out { color:#4EC9B0; }
+
+  .box { padding:12px 16px; border-radius:8px; font-size:0.86rem; margin:10px 0 4px; line-height:1.55; }
+  .box.tip { background:var(--green-bg); border:1px solid var(--green-border); }
+  .box.warn { background:var(--orange-bg); border:1px solid var(--orange-border); }
+  .box.note { background:var(--blue-bg); border:1px solid var(--blue-border); }
+  .box.err { background:var(--red-bg); border:1px solid var(--red-border); }
+  .box strong { font-weight:600; }
+  .box code { background:rgba(0,0,0,0.06); padding:1px 5px; border-radius:3px; font-family:'JetBrains Mono',monospace; font-size:0.82rem; }
+
+  /* ─── LINK BLOCKS ─── */
+  .lnk {
     display: flex;
     align-items: center;
     gap: 10px;
-  }
-  .phase-wsl { background: var(--blue-bg); border-left: 4px solid var(--blue-border); color: var(--navy); }
-  .phase-tmux { background: var(--green-bg); border-left: 4px solid var(--green-border); color: #1B5E20; }
-  .phase-claude { background: var(--orange-bg); border-left: 4px solid var(--orange-border); color: var(--orange); }
-  .phase-launch { background: var(--purple-bg); border-left: 4px solid var(--purple-border); color: #6A1B9A; }
-  .phase-verify { background: var(--red-bg); border-left: 4px solid var(--red-border); color: var(--red); }
-
-  /* ─── Step Card ─── */
-  .step {
-    background: white;
-    border: 1px solid var(--gray-200);
-    border-radius: var(--radius);
-    margin-bottom: 12px;
-    box-shadow: var(--shadow);
-    transition: border-color 0.2s, box-shadow 0.2s;
-    overflow: hidden;
-  }
-  .step:hover { border-color: var(--gray-300); box-shadow: var(--shadow-hover); }
-  .step.done { border-left: 4px solid var(--green); }
-  .step.done .step-title { color: var(--gray-400); text-decoration: line-through; }
-
-  .step-header {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 18px 22px 0;
-    cursor: pointer;
-    user-select: none;
-  }
-
-  .check {
-    width: 24px; height: 24px; min-width: 24px;
-    border: 2px solid var(--gray-300);
-    border-radius: 7px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 1px;
-    transition: all 0.15s;
-    background: white;
-    font-size: 0;
-  }
-  .check:hover { border-color: var(--blue); background: var(--blue-bg); }
-  .check.on {
-    background: var(--green);
-    border-color: var(--green);
-    font-size: 14px;
-    color: white;
-  }
-  .check.on::after { content: '✓'; font-weight: 800; }
-
-  .step-num {
-    background: var(--navy);
-    color: white;
-    width: 26px; height: 26px; min-width: 26px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.78rem;
-    font-weight: 700;
-  }
-
-  .step-body { flex: 1; }
-  .step-title { font-weight: 600; font-size: 1rem; margin-bottom: 2px; transition: all 0.2s; }
-  .step-desc { font-size: 0.88rem; color: var(--gray-600); }
-
-  .step-detail { padding: 6px 22px 18px 62px; }
-
-  /* ─── Code Block ─── */
-  .cb {
-    background: #1a1a2e;
-    border-radius: 8px;
-    margin: 10px 0 6px;
-    overflow: hidden;
-    font-family: 'JetBrains Mono', monospace;
-  }
-  .cb-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 7px 14px;
-    background: rgba(255,255,255,0.04);
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-  }
-  .cb-bar .dots { display: flex; gap: 5px; }
-  .cb-bar .dot { width: 9px; height: 9px; border-radius: 50%; }
-  .cb-bar .dot.r { background: #FF5F56; }
-  .cb-bar .dot.y { background: #FFBD2E; }
-  .cb-bar .dot.g { background: #27C93F; }
-  .cb-bar .tag {
-    font-size: 0.7rem;
-    color: #666;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-  }
-  .cpbtn {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.12);
-    color: #999;
-    padding: 3px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.72rem;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 500;
-    transition: all 0.2s;
-  }
-  .cpbtn:hover { background: rgba(255,255,255,0.18); color: #fff; }
-  .cpbtn.ok { background: var(--green); color: white; border-color: var(--green); }
-  .cb pre {
-    padding: 12px 16px;
-    overflow-x: auto;
-    font-size: 0.84rem;
-    line-height: 1.6;
-    color: #E8E8E8;
-    white-space: pre;
-  }
-  .cmt { color: #6A9955; }
-  .str { color: #CE9178; }
-  .kw { color: #569CD6; }
-  .fn { color: #DCDCAA; }
-  .out { color: #4EC9B0; }
-
-  /* ─── Callout Boxes ─── */
-  .box {
-    padding: 12px 16px;
-    border-radius: 8px;
-    font-size: 0.86rem;
-    margin: 10px 0 4px;
-    line-height: 1.55;
-  }
-  .box.tip { background: var(--green-bg); border: 1px solid var(--green-border); }
-  .box.warn { background: var(--orange-bg); border: 1px solid var(--orange-border); }
-  .box.note { background: var(--blue-bg); border: 1px solid var(--blue-border); }
-  .box.err { background: var(--red-bg); border: 1px solid var(--red-border); }
-  .box strong { font-weight: 600; }
-  .box code {
-    background: rgba(0,0,0,0.06);
-    padding: 1px 5px;
-    border-radius: 3px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.82rem;
-  }
-
-  /* ─── Links ─── */
-  a.ext {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--blue);
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.88rem;
-    transition: color 0.2s;
-  }
-  a.ext:hover { color: var(--navy); text-decoration: underline; }
-  a.ext::before { content: '↗'; font-size: 0.85rem; font-weight: 700; }
-
-  a.gh {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--gray-900);
-    color: white;
-    padding: 10px 18px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.88rem;
-    transition: transform 0.15s, box-shadow 0.15s;
-    margin: 6px 4px 6px 0;
-  }
-  a.gh:hover { transform: translateY(-1px); box-shadow: var(--shadow-hover); }
-  a.gh svg { width: 16px; height: 16px; fill: white; }
-
-  /* ─── Troubleshoot Accordion ─── */
-  .trouble {
-    margin: 10px 0;
-    border: 1px solid var(--gray-200);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  .trouble summary {
-    padding: 12px 16px;
-    cursor: pointer;
-    font-weight: 600;
-    font-size: 0.88rem;
     background: var(--gray-100);
-    list-style: none;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .trouble summary::before { content: '🔧'; }
-  .trouble summary::-webkit-details-marker { display: none; }
-  .trouble[open] summary { border-bottom: 1px solid var(--gray-200); }
-  .trouble .fix {
-    padding: 14px 16px;
-    font-size: 0.86rem;
-    background: white;
-  }
-  .trouble .fix p { margin-bottom: 8px; }
-
-  /* ─── Diagram ─── */
-  .diagram {
-    background: white;
     border: 1px solid var(--gray-200);
-    border-radius: var(--radius);
-    padding: 20px;
-    margin: 16px 0;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.82rem;
-    line-height: 1.7;
-    color: var(--gray-800);
-    box-shadow: var(--shadow);
-    overflow-x: auto;
-    white-space: pre;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 8px 0;
+    transition: border-color 0.2s, background 0.2s;
+    cursor: pointer;
   }
+  .lnk:hover { border-color: var(--blue-border); background: var(--blue-bg); }
+  .lnk:active { background: #BBDEFB; }
+  .lnk .li { font-size: 1.1rem; min-width: 24px; text-align: center; }
+  .lnk .lt { flex: 1; min-width: 0; }
+  .lnk .ll { font-weight: 600; font-size: 0.88rem; color: var(--navy); margin-bottom: 1px; }
+  .lnk .lu { font-family: 'JetBrains Mono', monospace; font-size: 0.73rem; color: var(--blue); word-break: break-all; line-height: 1.4; }
+  .lnk .lc {
+    background: white; border: 1px solid var(--gray-300); color: var(--gray-600);
+    padding: 5px 14px; border-radius: 6px; cursor: pointer;
+    font-size: 0.75rem; font-family: 'DM Sans', sans-serif; font-weight: 600;
+    transition: all 0.15s; white-space: nowrap;
+  }
+  .lnk .lc:hover { background: var(--blue); color: white; border-color: var(--blue); }
+  .lnk .lc.ok { background: var(--green); color: white; border-color: var(--green); }
 
-  /* ─── Table ─── */
-  .ref-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.88rem;
-  }
-  .ref-table td {
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--gray-200);
-    vertical-align: top;
-  }
-  .ref-table td:first-child {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.82rem;
-    font-weight: 500;
-    color: var(--navy);
-    white-space: nowrap;
-  }
-  .ref-table td:last-child { color: var(--gray-600); }
+  .lnk.gh { background: var(--gray-900); border-color: var(--gray-800); }
+  .lnk.gh:hover { background: #2d2d2d; border-color: var(--gray-600); }
+  .lnk.gh .ll { color: white; }
+  .lnk.gh .lu { color: #90CAF9; }
+  .lnk.gh .lc { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: #ccc; }
+  .lnk.gh .lc:hover { background: var(--blue); color: white; }
 
-  .footer {
-    text-align: center;
-    padding: 28px;
-    color: var(--gray-400);
-    font-size: 0.82rem;
-    margin-top: 40px;
-    border-top: 1px solid var(--gray-200);
-  }
-  .footer a { color: var(--blue); text-decoration: none; }
+  .trouble { margin:10px 0; border:1px solid var(--gray-200); border-radius:8px; overflow:hidden; }
+  .trouble summary { padding:12px 16px; cursor:pointer; font-weight:600; font-size:0.88rem; background:var(--gray-100); list-style:none; display:flex; align-items:center; gap:8px; }
+  .trouble summary::before { content:'🔧'; }
+  .trouble summary::-webkit-details-marker { display:none; }
+  .trouble[open] summary { border-bottom:1px solid var(--gray-200); }
+  .trouble .fix { padding:14px 16px; font-size:0.86rem; background:white; }
+  .trouble .fix p { margin-bottom:8px; }
 
-  @media (max-width: 640px) {
-    .header h1 { font-size: 1.5rem; }
-    .step-detail { padding-left: 22px; }
-    .diagram { font-size: 0.72rem; }
+  .diagram { background:white; border:1px solid var(--gray-200); border-radius:var(--radius); padding:20px; margin:16px 0; font-family:'JetBrains Mono',monospace; font-size:0.82rem; line-height:1.7; color:var(--gray-800); box-shadow:var(--shadow); overflow-x:auto; white-space:pre; }
+
+  .ref-table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+  .ref-table td { padding:10px 12px; border-bottom:1px solid var(--gray-200); vertical-align:top; }
+  .ref-table td:first-child { font-family:'JetBrains Mono',monospace; font-size:0.82rem; font-weight:500; color:var(--navy); white-space:nowrap; }
+  .ref-table td:last-child { color:var(--gray-600); }
+
+  .footer { text-align:center; padding:28px; color:var(--gray-400); font-size:0.82rem; margin-top:40px; border-top:1px solid var(--gray-200); }
+
+  @media (max-width:640px) {
+    .header h1 { font-size:1.5rem; }
+    .step-detail { padding-left:22px; }
+    .diagram { font-size:0.72rem; }
+    .lnk { flex-wrap: wrap; }
   }
 </style>
 </head>
@@ -401,7 +169,7 @@
 <div class="header">
   <div class="badge">Windows → WSL → tmux → Agent Teams</div>
   <h1>tmux + Claude Code Launch Guide</h1>
-  <p>Install WSL, install tmux, launch Claude Code inside tmux, and run your first Agent Team — all from Windows.</p>
+  <p>Install WSL, install tmux, launch Claude Code inside tmux, and run your first Agent Team.</p>
 </div>
 
 <div class="progress-wrap">
@@ -411,9 +179,7 @@
 
 <div class="container">
 
-  <!-- Architecture Diagram -->
-  <div class="diagram">
-<span class="kw">Windows PowerShell</span>
+  <div class="diagram"><span class="kw">Windows PowerShell</span>
     │
     ▼
 <span class="fn">WSL (Ubuntu 24.04)</span>          ← Linux subsystem on your Windows PC
@@ -424,446 +190,200 @@
     ├──► <span class="str">Pane 1: Lead Agent</span>     ← Coordinator (Delegate Mode)
     ├──► <span class="str">Pane 2: Schema Agent</span>   ← Defines Supabase contracts
     ├──► <span class="str">Pane 3: Scraper Agent</span>  ← Builds AgentQL scraper
-    └──► <span class="str">Pane 4: Test Agent</span>     ← Validates + integrates
-  </div>
+    └──► <span class="str">Pane 4: Test Agent</span>     ← Validates + integrates</div>
 
-  <!-- ═══ PHASE 1: WSL ═══ -->
-  <div class="phase phase-wsl">🪟 Phase 1 — Install WSL (Windows Subsystem for Linux)</div>
+  <!-- PHASE 1 -->
+  <div class="phase phase-wsl">🪟 Phase 1 — Install WSL</div>
 
   <div class="step" data-s="1">
-    <div class="step-header" onclick="tog(this)">
-      <div class="check" onclick="event.stopPropagation(); chk(this)"></div>
-      <div class="step-num">1</div>
-      <div class="step-body">
-        <div class="step-title">Open PowerShell as Administrator</div>
-        <div class="step-desc">Right-click the Start button → "Terminal (Admin)" or search "PowerShell" → Run as Administrator.</div>
-      </div>
-    </div>
+    <div class="step-header"><div class="check" onclick="event.stopPropagation();chk(this)"></div><div class="step-num">1</div><div class="step-body"><div class="step-title">Open PowerShell as Administrator</div><div class="step-desc">Right-click Start → "Terminal (Admin)" or search "PowerShell" → Run as Administrator.</div></div></div>
     <div class="step-detail">
-      <div class="box note">ℹ️ <strong>Already have WSL?</strong> Run <code>wsl --version</code> in PowerShell. If it outputs a version number, skip to <strong>Step 4</strong>.</div>
-      <a href="https://learn.microsoft.com/en-us/windows/terminal/install" target="_blank" class="ext">Download Windows Terminal (recommended)</a>
+      <div class="box note">ℹ️ <strong>Already have WSL?</strong> Run <code>wsl --version</code>. If it works, skip to Step 4.</div>
+      <div class="lnk" onclick="cl(this)"><div class="li">📥</div><div class="lt"><div class="ll">Download Windows Terminal (recommended)</div><div class="lu">https://learn.microsoft.com/en-us/windows/terminal/install</div></div><button class="lc" onclick="event.stopPropagation();cl(this.parentElement)">Copy URL</button></div>
     </div>
   </div>
 
   <div class="step" data-s="2">
-    <div class="step-header" onclick="tog(this)">
-      <div class="check" onclick="event.stopPropagation(); chk(this)"></div>
-      <div class="step-num">2</div>
-      <div class="step-body">
-        <div class="step-title">Install WSL with Ubuntu</div>
-        <div class="step-desc">One command installs WSL + Ubuntu. This takes 2-5 minutes and requires a restart.</div>
-      </div>
-    </div>
+    <div class="step-header"><div class="check" onclick="event.stopPropagation();chk(this)"></div><div class="step-num">2</div><div class="step-body"><div class="step-title">Install WSL with Ubuntu</div><div class="step-desc">One command. Takes 2-5 min, requires a restart.</div></div></div>
     <div class="step-detail">
-      <div class="cb">
-        <div class="cb-bar">
-          <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
-          <span class="tag">POWERSHELL (ADMIN)</span>
-          <button class="cpbtn" onclick="cp(this)">Copy</button>
-        </div>
-        <pre><code>wsl --install</code></pre>
-      </div>
-      <div class="box warn">⚠️ <strong>Restart required.</strong> After the command completes, <strong>restart your computer</strong>. WSL finishes setup on reboot.</div>
-      <a href="https://learn.microsoft.com/en-us/windows/wsl/install" target="_blank" class="ext">Microsoft WSL install guide (official)</a>
+      <div class="cb"><div class="cb-bar"><div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div><span class="tag">POWERSHELL (ADMIN)</span><button class="cpbtn" onclick="cp(this)">Copy</button></div><pre><code>wsl --install</code></pre></div>
+      <div class="box warn">⚠️ <strong>Restart required.</strong> After command completes, <strong>restart your computer</strong>.</div>
+      <div class="lnk" onclick="cl(this)"><div class="li">📖</div><div class="lt"><div class="ll">Microsoft WSL install guide (official)</div><div class="lu">https://learn.microsoft.com/en-us/windows/wsl/install</div></div><button class="lc" onclick="event.stopPropagation();cl(this.parentElement)">Copy URL</button></div>
     </div>
   </div>
 
   <div class="step" data-s="3">
-    <div class="step-header" onclick="tog(this)">
-      <div class="check" onclick="event.stopPropagation(); chk(this)"></div>
-      <div class="step-num">3</div>
-      <div class="step-body">
-        <div class="step-title">First launch — create your Linux username</div>
-        <div class="step-desc">After restart, Ubuntu opens automatically. Create a username and password (this is your Linux login, not your Windows one).</div>
-      </div>
-    </div>
+    <div class="step-header"><div class="check" onclick="event.stopPropagation();chk(this)"></div><div class="step-num">3</div><div class="step-body"><div class="step-title">First launch — create Linux username</div><div class="step-desc">After restart, Ubuntu opens. Create username & password (Linux login, not Windows).</div></div></div>
     <div class="step-detail">
-      <div class="box note">ℹ️ If Ubuntu doesn't open automatically: search "Ubuntu" in Start menu, or type <code>wsl</code> in PowerShell.</div>
-      <div class="cb">
-        <div class="cb-bar">
-          <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
-          <span class="tag">POWERSHELL</span>
-          <button class="cpbtn" onclick="cp(this)">Copy</button>
-        </div>
-        <pre><code><span class="cmt"># If Ubuntu didn't auto-open after restart:</span>
-wsl</code></pre>
-      </div>
-
-      <details class="trouble">
-        <summary>Troubleshoot: "WSL 2 requires an update to its kernel component"</summary>
-        <div class="fix">
-          <p>Download and install the WSL2 kernel update package:</p>
-          <a href="https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi" target="_blank" class="ext">Download WSL2 kernel update (Microsoft)</a>
-          <p>Run the MSI installer, then restart and try <code>wsl</code> again.</p>
-        </div>
-      </details>
-
-      <details class="trouble">
-        <summary>Troubleshoot: "Virtualization must be enabled in BIOS"</summary>
-        <div class="fix">
-          <p>WSL2 requires hardware virtualization. Restart your PC, enter BIOS (usually F2, F12, or DEL during boot), and enable:</p>
-          <p><strong>Intel:</strong> "Intel VT-x" or "Intel Virtualization Technology"</p>
-          <p><strong>AMD:</strong> "AMD-V" or "SVM Mode"</p>
-          <a href="https://support.microsoft.com/en-us/windows/enable-virtualization-on-windows-c5578302-6e43-4b4b-aafe-fd3a5351fd28" target="_blank" class="ext">Microsoft: Enable virtualization</a>
-        </div>
-      </details>
+      <div class="box note">ℹ️ If Ubuntu didn't auto-open: search "Ubuntu" in Start menu, or type <code>wsl</code> in PowerShell.</div>
+      <div class="cb"><div class="cb-bar"><div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div><span class="tag">POWERSHELL</span><button class="cpbtn" onclick="cp(this)">Copy</button></div><pre><code><span class="cmt"># If Ubuntu didn't auto-open:</span>
+wsl</code></pre></div>
+      <details class="trouble"><summary>"WSL 2 requires an update to its kernel component"</summary><div class="fix"><p>Download and install the WSL2 kernel update:</p><div class="lnk" onclick="cl(this)"><div class="li">📥</div><div class="lt"><div class="ll">WSL2 kernel update (Microsoft)</div><div class="lu">https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi</div></div><button class="lc" onclick="event.stopPropagation();cl(this.parentElement)">Copy URL</button></div><p>Run the MSI, restart, try <code>wsl</code> again.</p></div></details>
+      <details class="trouble"><summary>"Virtualization must be enabled in BIOS"</summary><div class="fix"><p>Restart PC → enter BIOS (F2/F12/DEL) → enable:</p><p><strong>Intel:</strong> "Intel VT-x" &nbsp; <strong>AMD:</strong> "AMD-V" or "SVM Mode"</p><div class="lnk" onclick="cl(this)"><div class="li">📖</div><div class="lt"><div class="ll">Microsoft: Enable virtualization</div><div class="lu">https://support.microsoft.com/en-us/windows/enable-virtualization-on-windows-c5578302-6e43-4b4b-aafe-fd3a5351fd28</div></div><button class="lc" onclick="event.stopPropagation();cl(this.parentElement)">Copy URL</button></div></div></details>
     </div>
   </div>
 
   <div class="step" data-s="4">
-    <div class="step-header" onclick="tog(this)">
-      <div class="check" onclick="event.stopPropagation(); chk(this)"></div>
-      <div class="step-num">4</div>
-      <div class="step-body">
-        <div class="step-title">Verify WSL is working</div>
-        <div class="step-desc">Confirm you're inside a Linux shell and everything is operational.</div>
-      </div>
-    </div>
+    <div class="step-header"><div class="check" onclick="event.stopPropagation();chk(this)"></div><div class="step-num">4</div><div class="step-body"><div class="step-title">Verify WSL is working</div><div class="step-desc">Confirm Linux shell is operational.</div></div></div>
     <div class="step-detail">
-      <div class="cb">
-        <div class="cb-bar">
-          <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
-          <span class="tag">WSL / BASH</span>
-          <button class="cpbtn" onclick="cp(this)">Copy</button>
-        </div>
-        <pre><code><span class="cmt"># Should print your Ubuntu version</span>
+      <div class="cb"><div class="cb-bar"><div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div><span class="tag">WSL / BASH</span><button class="cpbtn" onclick="cp(this)">Copy</button></div><pre><code><span class="cmt"># Should print Ubuntu version</span>
 cat /etc/os-release | head -3
 
 <span class="cmt"># Should show Linux kernel</span>
-uname -a</code></pre>
-      </div>
-      <div class="box tip">✅ <strong>Expected:</strong> You see "Ubuntu" and "Linux" in the output. You're now running Linux inside Windows.</div>
+uname -a</code></pre></div>
+      <div class="box tip">✅ You see "Ubuntu" and "Linux" — you're running Linux inside Windows.</div>
     </div>
   </div>
 
-  <!-- ═══ PHASE 2: TMUX ═══ -->
+  <!-- PHASE 2 -->
   <div class="phase phase-tmux">🖥️ Phase 2 — Install tmux</div>
 
   <div class="step" data-s="5">
-    <div class="step-header" onclick="tog(this)">
-      <div class="check" onclick="event.stopPropagation(); chk(this)"></div>
-      <div class="step-num">5</div>
-      <div class="step-body">
-        <div class="step-title">Install tmux via apt</div>
-        <div class="step-desc">tmux is the terminal multiplexer that Agent Teams uses to spawn split-pane agents. Takes 10 seconds.</div>
-      </div>
-    </div>
+    <div class="step-header"><div class="check" onclick="event.stopPropagation();chk(this)"></div><div class="step-num">5</div><div class="step-body"><div class="step-title">Install tmux</div><div class="step-desc">Terminal multiplexer for Agent Teams split panes. 10 seconds.</div></div></div>
     <div class="step-detail">
-      <div class="cb">
-        <div class="cb-bar">
-          <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
-          <span class="tag">WSL / BASH</span>
-          <button class="cpbtn" onclick="cp(this)">Copy</button>
-        </div>
-        <pre><code>sudo apt update && sudo apt install tmux -y</code></pre>
-      </div>
+      <div class="cb"><div class="cb-bar"><div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div><span class="tag">WSL / BASH</span><button class="cpbtn" onclick="cp(this)">Copy</button></div><pre><code>sudo apt update && sudo apt install tmux -y</code></pre></div>
     </div>
   </div>
 
   <div class="step" data-s="6">
-    <div class="step-header" onclick="tog(this)">
-      <div class="check" onclick="event.stopPropagation(); chk(this)"></div>
-      <div class="step-num">6</div>
-      <div class="step-body">
-        <div class="step-title">Verify tmux is installed</div>
-        <div class="step-desc">Confirm version number shows up.</div>
-      </div>
-    </div>
+    <div class="step-header"><div class="check" onclick="event.stopPropagation();chk(this)"></div><div class="step-num">6</div><div class="step-body"><div class="step-title">Verify tmux</div><div class="step-desc">Confirm version number.</div></div></div>
     <div class="step-detail">
-      <div class="cb">
-        <div class="cb-bar">
-          <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
-          <span class="tag">WSL / BASH</span>
-          <button class="cpbtn" onclick="cp(this)">Copy</button>
-        </div>
-        <pre><code>tmux -V</code></pre>
-      </div>
-      <div class="box tip">✅ <strong>Expected:</strong> <code>tmux 3.4</code> or similar. Any 3.x version works.</div>
+      <div class="cb"><div class="cb-bar"><div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div><span class="tag">WSL / BASH</span><button class="cpbtn" onclick="cp(this)">Copy</button></div><pre><code>tmux -V</code></pre></div>
+      <div class="box tip">✅ <strong>Expected:</strong> <code>tmux 3.4</code> — any 3.x works.</div>
     </div>
   </div>
 
-  <!-- ═══ PHASE 3: CLAUDE CODE ═══ -->
-  <div class="phase phase-claude">🤖 Phase 3 — Install Claude Code (if not already installed)</div>
+  <!-- PHASE 3 -->
+  <div class="phase phase-claude">🤖 Phase 3 — Install Claude Code</div>
 
   <div class="step" data-s="7">
-    <div class="step-header" onclick="tog(this)">
-      <div class="check" onclick="event.stopPropagation(); chk(this)"></div>
-      <div class="step-num">7</div>
-      <div class="step-body">
-        <div class="step-title">Install Node.js (required for Claude Code)</div>
-        <div class="step-desc">Claude Code requires Node.js 18+. Install via NodeSource.</div>
-      </div>
-    </div>
+    <div class="step-header"><div class="check" onclick="event.stopPropagation();chk(this)"></div><div class="step-num">7</div><div class="step-body"><div class="step-title">Install Node.js 22 LTS</div><div class="step-desc">Claude Code requires Node 18+.</div></div></div>
     <div class="step-detail">
-      <div class="cb">
-        <div class="cb-bar">
-          <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
-          <span class="tag">WSL / BASH</span>
-          <button class="cpbtn" onclick="cp(this)">Copy</button>
-        </div>
-        <pre><code><span class="cmt"># Check if Node.js is already installed</span>
+      <div class="cb"><div class="cb-bar"><div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div><span class="tag">WSL / BASH</span><button class="cpbtn" onclick="cp(this)">Copy</button></div><pre><code><span class="cmt"># Check if already installed</span>
 node --version
 
-<span class="cmt"># If not installed or version &lt; 18, install Node 22 LTS:</span>
+<span class="cmt"># If not installed or &lt; 18:</span>
 curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
 sudo apt install -y nodejs
 
 <span class="cmt"># Verify</span>
-node --version && npm --version</code></pre>
-      </div>
-      <div class="box note">ℹ️ <strong>Already have Node 18+?</strong> Skip the install commands. Just verify with <code>node --version</code>.</div>
-      <a href="https://nodejs.org/en/download" target="_blank" class="ext">Node.js download page (alternative)</a>
+node --version && npm --version</code></pre></div>
+      <div class="lnk" onclick="cl(this)"><div class="li">📥</div><div class="lt"><div class="ll">Node.js downloads (alternative)</div><div class="lu">https://nodejs.org/en/download</div></div><button class="lc" onclick="event.stopPropagation();cl(this.parentElement)">Copy URL</button></div>
     </div>
   </div>
 
   <div class="step" data-s="8">
-    <div class="step-header" onclick="tog(this)">
-      <div class="check" onclick="event.stopPropagation(); chk(this)"></div>
-      <div class="step-num">8</div>
-      <div class="step-body">
-        <div class="step-title">Install Claude Code CLI</div>
-        <div class="step-desc">Install globally via npm, then authenticate with your Anthropic account.</div>
-      </div>
-    </div>
+    <div class="step-header"><div class="check" onclick="event.stopPropagation();chk(this)"></div><div class="step-num">8</div><div class="step-body"><div class="step-title">Install Claude Code CLI</div><div class="step-desc">Install via npm, then authenticate.</div></div></div>
     <div class="step-detail">
-      <div class="cb">
-        <div class="cb-bar">
-          <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
-          <span class="tag">WSL / BASH</span>
-          <button class="cpbtn" onclick="cp(this)">Copy</button>
-        </div>
-        <pre><code><span class="cmt"># Install Claude Code</span>
+      <div class="cb"><div class="cb-bar"><div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div><span class="tag">WSL / BASH</span><button class="cpbtn" onclick="cp(this)">Copy</button></div><pre><code><span class="cmt"># Install</span>
 npm install -g @anthropic-ai/claude-code
 
-<span class="cmt"># Verify installation</span>
+<span class="cmt"># Verify</span>
 claude --version
 
-<span class="cmt"># Authenticate (opens browser for OAuth)</span>
-claude auth login</code></pre>
-      </div>
-      <div class="box note">ℹ️ <strong>Already have Claude Code?</strong> Update to latest: <code>npm update -g @anthropic-ai/claude-code</code></div>
-      <a href="https://docs.anthropic.com/en/docs/claude-code/getting-started" target="_blank" class="ext">Claude Code getting started guide (Anthropic docs)</a><br>
-      <a href="https://docs.anthropic.com/en/docs/claude-code/troubleshooting" target="_blank" class="ext">Claude Code troubleshooting guide</a>
-
-      <details class="trouble">
-        <summary>Troubleshoot: "Permission denied" during npm install</summary>
-        <div class="fix">
-          <p>Fix npm global permissions:</p>
-          <div class="cb">
-            <div class="cb-bar"><div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div><span class="tag">BASH</span><button class="cpbtn" onclick="cp(this)">Copy</button></div>
-            <pre><code>mkdir -p ~/.npm-global
+<span class="cmt"># Authenticate (opens browser)</span>
+claude auth login</code></pre></div>
+      <div class="box note">ℹ️ Already installed? Update: <code>npm update -g @anthropic-ai/claude-code</code></div>
+      <div class="lnk" onclick="cl(this)"><div class="li">📖</div><div class="lt"><div class="ll">Claude Code: Getting started (Anthropic)</div><div class="lu">https://docs.anthropic.com/en/docs/claude-code/getting-started</div></div><button class="lc" onclick="event.stopPropagation();cl(this.parentElement)">Copy URL</button></div>
+      <div class="lnk" onclick="cl(this)"><div class="li">🔧</div><div class="lt"><div class="ll">Claude Code troubleshooting</div><div class="lu">https://docs.anthropic.com/en/docs/claude-code/troubleshooting</div></div><button class="lc" onclick="event.stopPropagation();cl(this.parentElement)">Copy URL</button></div>
+      <details class="trouble"><summary>"Permission denied" during npm install</summary><div class="fix"><div class="cb"><div class="cb-bar"><div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div><span class="tag">BASH</span><button class="cpbtn" onclick="cp(this)">Copy</button></div><pre><code>mkdir -p ~/.npm-global
 npm config set prefix '~/.npm-global'
 echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.bashrc
 source ~/.bashrc
-npm install -g @anthropic-ai/claude-code</code></pre>
-          </div>
-        </div>
-      </details>
-
-      <details class="trouble">
-        <summary>Troubleshoot: Browser doesn't open for auth</summary>
-        <div class="fix">
-          <p>WSL may not auto-open browsers. Copy the URL from terminal output and paste it into your Windows browser manually. After authorizing, the CLI will detect the auth token.</p>
-        </div>
-      </details>
+npm install -g @anthropic-ai/claude-code</code></pre></div></div></details>
+      <details class="trouble"><summary>Browser doesn't open for auth</summary><div class="fix"><p>WSL can't always open browsers. Copy the URL from terminal output → paste in Windows browser. CLI detects the auth token automatically.</p></div></details>
     </div>
   </div>
 
-  <!-- ═══ PHASE 4: LAUNCH ═══ -->
+  <!-- PHASE 4 -->
   <div class="phase phase-launch">🚀 Phase 4 — Launch Claude Code Inside tmux</div>
 
   <div class="step" data-s="9">
-    <div class="step-header" onclick="tog(this)">
-      <div class="check" onclick="event.stopPropagation(); chk(this)"></div>
-      <div class="step-num">9</div>
-      <div class="step-body">
-        <div class="step-title">Enable Agent Teams experimental flag</div>
-        <div class="step-desc">Set the environment variable so Claude Code unlocks Agent Teams capability.</div>
-      </div>
-    </div>
+    <div class="step-header"><div class="check" onclick="event.stopPropagation();chk(this)"></div><div class="step-num">9</div><div class="step-body"><div class="step-title">Enable Agent Teams flag</div><div class="step-desc">Set env var to unlock Agent Teams in Claude Code.</div></div></div>
     <div class="step-detail">
-      <div class="cb">
-        <div class="cb-bar">
-          <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
-          <span class="tag">WSL / BASH</span>
-          <button class="cpbtn" onclick="cp(this)">Copy</button>
-        </div>
-        <pre><code><span class="cmt"># Add to .bashrc so it persists across sessions</span>
+      <div class="cb"><div class="cb-bar"><div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div><span class="tag">WSL / BASH</span><button class="cpbtn" onclick="cp(this)">Copy</button></div><pre><code><span class="cmt"># Persist across sessions</span>
 echo 'export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1' >> ~/.bashrc
 source ~/.bashrc
 
-<span class="cmt"># Verify it's set</span>
-echo $CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS</code></pre>
-      </div>
-      <div class="box tip">✅ <strong>Expected output:</strong> <code>1</code></div>
-      <div class="box note">ℹ️ Our repos already have <code>.claude/settings.local.json</code> with this flag — but the env var ensures it works everywhere.</div>
+<span class="cmt"># Verify</span>
+echo $CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS</code></pre></div>
+      <div class="box tip">✅ Output: <code>1</code></div>
     </div>
   </div>
 
   <div class="step" data-s="10">
-    <div class="step-header" onclick="tog(this)">
-      <div class="check" onclick="event.stopPropagation(); chk(this)"></div>
-      <div class="step-num">10</div>
-      <div class="step-body">
-        <div class="step-title">Navigate to your project repo</div>
-        <div class="step-desc">cd into the repo where you want Agent Teams to work. For county scrapers, use zonewise-modal.</div>
-      </div>
-    </div>
+    <div class="step-header"><div class="check" onclick="event.stopPropagation();chk(this)"></div><div class="step-num">10</div><div class="step-body"><div class="step-title">Navigate to project repo</div><div class="step-desc">cd into the repo where Agent Teams will run.</div></div></div>
     <div class="step-detail">
-      <div class="cb">
-        <div class="cb-bar">
-          <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
-          <span class="tag">WSL / BASH</span>
-          <button class="cpbtn" onclick="cp(this)">Copy</button>
-        </div>
-        <pre><code><span class="cmt"># Clone if you haven't already</span>
+      <div class="cb"><div class="cb-bar"><div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div><span class="tag">WSL / BASH</span><button class="cpbtn" onclick="cp(this)">Copy</button></div><pre><code><span class="cmt"># Clone if needed</span>
 git clone https://github.com/breverdbidder/zonewise-modal.git ~/zonewise-modal
 
-<span class="cmt"># Navigate into it</span>
-cd ~/zonewise-modal</code></pre>
-      </div>
+<span class="cmt"># Navigate</span>
+cd ~/zonewise-modal</code></pre></div>
     </div>
   </div>
 
   <div class="step" data-s="11">
-    <div class="step-header" onclick="tog(this)">
-      <div class="check" onclick="event.stopPropagation(); chk(this)"></div>
-      <div class="step-num">11</div>
-      <div class="step-body">
-        <div class="step-title">Start tmux session, then launch Claude Code</div>
-        <div class="step-desc"><strong>This is the critical step.</strong> Claude Code MUST be running inside tmux for Agent Teams split panes to work.</div>
-      </div>
-    </div>
+    <div class="step-header"><div class="check" onclick="event.stopPropagation();chk(this)"></div><div class="step-num">11</div><div class="step-body"><div class="step-title">Start tmux → launch Claude Code inside it</div><div class="step-desc"><strong>CRITICAL.</strong> Claude Code MUST run inside tmux for split panes.</div></div></div>
     <div class="step-detail">
-      <div class="cb">
-        <div class="cb-bar">
-          <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
-          <span class="tag">WSL / BASH — RUN THESE IN ORDER</span>
-          <button class="cpbtn" onclick="cp(this)">Copy</button>
-        </div>
-        <pre><code><span class="cmt"># Step A: Start a tmux session named "zonewise"</span>
+      <div class="cb"><div class="cb-bar"><div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div><span class="tag">WSL / BASH — RUN IN ORDER</span><button class="cpbtn" onclick="cp(this)">Copy</button></div><pre><code><span class="cmt"># Step A: Start tmux session</span>
 tmux new-session -s zonewise
 
-<span class="cmt"># Step B: (you're now INSIDE tmux — notice the green bar at bottom)</span>
-<span class="cmt"># Launch Claude Code from within tmux</span>
-claude</code></pre>
-      </div>
-
-      <div class="box warn">⚠️ <strong>Order matters!</strong> tmux first, THEN claude inside it. If you run <code>claude</code> outside tmux, agents spawn headless with no visible panes.</div>
-      <div class="box tip">✅ <strong>How to know you're in tmux:</strong> Look for a <span style="color: var(--green); font-weight: 700;">green status bar</span> at the bottom of your terminal showing <code>[zonewise]</code>.</div>
-
-      <details class="trouble">
-        <summary>Troubleshoot: "sessions should be nested with care"</summary>
-        <div class="fix">
-          <p>You're already inside a tmux session and trying to create another. Exit first:</p>
-          <div class="cb">
-            <div class="cb-bar"><div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div><span class="tag">BASH</span><button class="cpbtn" onclick="cp(this)">Copy</button></div>
-            <pre><code><span class="cmt"># Detach from current session</span>
-<span class="cmt"># Press: Ctrl+B, then D</span>
-
-<span class="cmt"># Kill any existing sessions</span>
+<span class="cmt"># Step B: Now INSIDE tmux (green bar at bottom)</span>
+<span class="cmt"># Launch Claude Code</span>
+claude</code></pre></div>
+      <div class="box warn">⚠️ <strong>Order matters!</strong> tmux first, THEN claude. Outside tmux = no visible panes.</div>
+      <div class="box tip">✅ <strong>In tmux?</strong> Look for <strong style="color:var(--green)">green bar</strong> at bottom showing <code>[zonewise]</code>.</div>
+      <details class="trouble"><summary>"sessions should be nested with care"</summary><div class="fix"><p>Already in tmux. Exit first:</p><div class="cb"><div class="cb-bar"><div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div><span class="tag">BASH</span><button class="cpbtn" onclick="cp(this)">Copy</button></div><pre><code><span class="cmt"># Detach: Ctrl+B then D</span>
 tmux kill-server
-
-<span class="cmt"># Start fresh</span>
-tmux new-session -s zonewise</code></pre>
-          </div>
-        </div>
-      </details>
-
-      <details class="trouble">
-        <summary>Troubleshoot: tmux colors look broken or garbled</summary>
-        <div class="fix">
-          <p>Add 256-color support:</p>
-          <div class="cb">
-            <div class="cb-bar"><div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div><span class="tag">BASH</span><button class="cpbtn" onclick="cp(this)">Copy</button></div>
-            <pre><code>echo 'set -g default-terminal "screen-256color"' >> ~/.tmux.conf
-tmux source-file ~/.tmux.conf</code></pre>
-          </div>
-        </div>
-      </details>
+tmux new-session -s zonewise</code></pre></div></div></details>
+      <details class="trouble"><summary>tmux colors broken or garbled</summary><div class="fix"><div class="cb"><div class="cb-bar"><div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div><span class="tag">BASH</span><button class="cpbtn" onclick="cp(this)">Copy</button></div><pre><code>echo 'set -g default-terminal "screen-256color"' >> ~/.tmux.conf
+tmux source-file ~/.tmux.conf</code></pre></div></div></details>
     </div>
   </div>
 
-  <!-- ═══ PHASE 5: RUN IT ═══ -->
+  <!-- PHASE 5 -->
   <div class="phase phase-verify">🏁 Phase 5 — Run Your First Agent Team</div>
 
   <div class="step" data-s="12">
-    <div class="step-header" onclick="tog(this)">
-      <div class="check" onclick="event.stopPropagation(); chk(this)"></div>
-      <div class="step-num">12</div>
-      <div class="step-body">
-        <div class="step-title">Run /build-county-scraper</div>
-        <div class="step-desc">Inside Claude Code (which is inside tmux), run the Agent Teams command. Watch the panes split!</div>
-      </div>
-    </div>
+    <div class="step-header"><div class="check" onclick="event.stopPropagation();chk(this)"></div><div class="step-num">12</div><div class="step-body"><div class="step-title">Run /build-county-scraper</div><div class="step-desc">Inside Claude Code (inside tmux) — watch panes split!</div></div></div>
     <div class="step-detail">
-      <div class="cb">
-        <div class="cb-bar">
-          <div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
-          <span class="tag">CLAUDE CODE (INSIDE TMUX)</span>
-          <button class="cpbtn" onclick="cp(this)">Copy</button>
-        </div>
-        <pre><code>/build-county-scraper orange</code></pre>
-      </div>
-
-      <div class="box tip">✅ <strong>What you should see:</strong><br>
-        1. Lead agent reads the auto-generated plan<br>
-        2. tmux splits into multiple panes<br>
-        3. Schema Agent spawns first (publishes data contract)<br>
-        4. Lead verifies contract → spawns Scraper Agent and Test Agent<br>
-        5. All agents work in parallel, visible in split panes
-      </div>
-
-      <div class="box note">ℹ️ <strong>Alternative test</strong> — use the pre-built plan file instead:
-        <div class="cb" style="margin-top: 6px;">
-          <div class="cb-bar"><div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div><span class="tag">CLAUDE CODE</span><button class="cpbtn" onclick="cp(this)">Copy</button></div>
-          <pre><code>/build-with-agent-team plans/orange-county-scraper-plan.md 3</code></pre>
-        </div>
+      <div class="cb"><div class="cb-bar"><div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div><span class="tag">CLAUDE CODE (INSIDE TMUX)</span><button class="cpbtn" onclick="cp(this)">Copy</button></div><pre><code>/build-county-scraper orange</code></pre></div>
+      <div class="box tip">✅ <strong>What you see:</strong><br>1. Lead agent reads plan<br>2. tmux splits into panes<br>3. Schema Agent → data contract<br>4. Lead verifies → Scraper + Test agents spawn<br>5. All agents work in parallel</div>
+      <div class="box note">ℹ️ <strong>Alternative:</strong> use pre-built plan:
+        <div class="cb" style="margin-top:6px;"><div class="cb-bar"><div class="dots"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div><span class="tag">CLAUDE CODE</span><button class="cpbtn" onclick="cp(this)">Copy</button></div><pre><code>/build-with-agent-team plans/orange-county-scraper-plan.md 3</code></pre></div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ QUICK REFERENCE ═══ -->
-  <div class="phase" style="background: var(--gray-100); border-left: 4px solid var(--gray-400); margin-top: 44px; color: var(--gray-800);">⚡ tmux Cheat Sheet</div>
-
-  <div style="background: white; border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 18px 22px; box-shadow: var(--shadow);">
+  <!-- CHEAT SHEET -->
+  <div class="phase" style="background:var(--gray-100);border-left:4px solid var(--gray-400);margin-top:44px;color:var(--gray-800);">⚡ tmux Cheat Sheet</div>
+  <div style="background:white;border:1px solid var(--gray-200);border-radius:var(--radius);padding:18px 22px;box-shadow:var(--shadow);">
     <table class="ref-table">
-      <tr><td>tmux new-session -s zonewise</td><td>Create new named session</td></tr>
-      <tr><td>Ctrl+B → D</td><td>Detach from tmux (agents keep running in background)</td></tr>
-      <tr><td>tmux attach -t zonewise</td><td>Reattach to running session</td></tr>
-      <tr><td>tmux ls</td><td>List all active sessions</td></tr>
-      <tr><td>Ctrl+B → Arrow keys</td><td>Switch between agent panes</td></tr>
-      <tr><td>Ctrl+B → Z</td><td>Zoom/fullscreen a single pane (press again to unzoom)</td></tr>
-      <tr><td>Ctrl+B → [</td><td>Scroll mode (use arrows/PgUp/PgDn, press Q to exit)</td></tr>
-      <tr><td>tmux kill-session -t zonewise</td><td>Kill session and all agent panes</td></tr>
-      <tr style="border-bottom: none;"><td>tmux kill-server</td><td>Nuclear option — kill everything</td></tr>
+      <tr><td>tmux new-session -s zonewise</td><td>Create named session</td></tr>
+      <tr><td>Ctrl+B → D</td><td>Detach (agents keep running)</td></tr>
+      <tr><td>tmux attach -t zonewise</td><td>Reattach to session</td></tr>
+      <tr><td>tmux ls</td><td>List sessions</td></tr>
+      <tr><td>Ctrl+B → Arrow keys</td><td>Switch panes</td></tr>
+      <tr><td>Ctrl+B → Z</td><td>Zoom/unzoom pane</td></tr>
+      <tr><td>Ctrl+B → [</td><td>Scroll mode (Q to exit)</td></tr>
+      <tr><td>tmux kill-session -t zonewise</td><td>Kill session</td></tr>
+      <tr style="border-bottom:none;"><td>tmux kill-server</td><td>Kill everything</td></tr>
     </table>
   </div>
 
-  <!-- ═══ LINKS ═══ -->
-  <div class="phase" style="background: var(--gray-100); border-left: 4px solid var(--gray-400); margin-top: 24px; color: var(--gray-800);">📚 All Links</div>
-
-  <div style="background: white; border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 18px 22px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 6px;">
-    <a href="https://github.com/breverdbidder/zonewise-agent-teams" target="_blank" class="gh">
-      <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-      ZoneWise Agent Teams — Source Repo
-    </a>
-    <a href="https://github.com/breverdbidder/zonewise-modal" target="_blank" class="gh">
-      <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-      zonewise-modal — Scraper Repo (primary target)
-    </a>
-    <a href="https://learn.microsoft.com/en-us/windows/wsl/install" target="_blank" class="ext">Microsoft: Install WSL (official)</a>
-    <a href="https://github.com/tmux/tmux/wiki/Getting-Started" target="_blank" class="ext">tmux Getting Started guide (official wiki)</a>
-    <a href="https://docs.anthropic.com/en/docs/claude-code/getting-started" target="_blank" class="ext">Claude Code: Getting started (Anthropic)</a>
-    <a href="https://docs.anthropic.com/en/docs/claude-code/agent-teams" target="_blank" class="ext">Claude Code: Agent Teams documentation</a>
-    <a href="https://github.com/coleam00/context-engineering-intro/tree/main/use-cases/build-with-agent-team" target="_blank" class="ext">Cole Medin's original Agent Teams skill</a>
-    <a href="https://www.anthropic.com/news/claude-opus-4-6" target="_blank" class="ext">Anthropic: Claude Opus 4.6 + Agent Teams announcement</a>
+  <!-- ALL LINKS -->
+  <div class="phase" style="background:var(--gray-100);border-left:4px solid var(--gray-400);margin-top:24px;color:var(--gray-800);">📚 All Links</div>
+  <div style="background:white;border:1px solid var(--gray-200);border-radius:var(--radius);padding:18px 22px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;">
+    <div class="lnk gh" onclick="cl(this)"><div class="li">🐙</div><div class="lt"><div class="ll">ZoneWise Agent Teams — Source Repo</div><div class="lu">https://github.com/breverdbidder/zonewise-agent-teams</div></div><button class="lc" onclick="event.stopPropagation();cl(this.parentElement)">Copy URL</button></div>
+    <div class="lnk gh" onclick="cl(this)"><div class="li">🐙</div><div class="lt"><div class="ll">zonewise-modal — Scraper Repo</div><div class="lu">https://github.com/breverdbidder/zonewise-modal</div></div><button class="lc" onclick="event.stopPropagation();cl(this.parentElement)">Copy URL</button></div>
+    <div class="lnk" onclick="cl(this)"><div class="li">📖</div><div class="lt"><div class="ll">Microsoft: Install WSL (official)</div><div class="lu">https://learn.microsoft.com/en-us/windows/wsl/install</div></div><button class="lc" onclick="event.stopPropagation();cl(this.parentElement)">Copy URL</button></div>
+    <div class="lnk" onclick="cl(this)"><div class="li">📖</div><div class="lt"><div class="ll">tmux Getting Started (official wiki)</div><div class="lu">https://github.com/tmux/tmux/wiki/Getting-Started</div></div><button class="lc" onclick="event.stopPropagation();cl(this.parentElement)">Copy URL</button></div>
+    <div class="lnk" onclick="cl(this)"><div class="li">📖</div><div class="lt"><div class="ll">Claude Code: Getting started</div><div class="lu">https://docs.anthropic.com/en/docs/claude-code/getting-started</div></div><button class="lc" onclick="event.stopPropagation();cl(this.parentElement)">Copy URL</button></div>
+    <div class="lnk" onclick="cl(this)"><div class="li">📖</div><div class="lt"><div class="ll">Claude Code: Agent Teams docs</div><div class="lu">https://docs.anthropic.com/en/docs/claude-code/agent-teams</div></div><button class="lc" onclick="event.stopPropagation();cl(this.parentElement)">Copy URL</button></div>
+    <div class="lnk" onclick="cl(this)"><div class="li">📖</div><div class="lt"><div class="ll">Cole Medin's original Agent Teams skill</div><div class="lu">https://github.com/coleam00/context-engineering-intro/tree/main/use-cases/build-with-agent-team</div></div><button class="lc" onclick="event.stopPropagation();cl(this.parentElement)">Copy URL</button></div>
   </div>
 
-  <div class="footer">
-    ZoneWise Agent Teams · Everest Capital USA · Feb 2026<br>
-    Adapted from <a href="https://github.com/coleam00/context-engineering-intro" target="_blank">Cole Medin's Context Engineering</a>
-  </div>
+  <div class="footer">ZoneWise Agent Teams · Everest Capital USA · Feb 2026</div>
 </div>
 
 <script>
@@ -876,22 +396,37 @@ function chk(el){
   else{s.classList.remove('done');done.delete(n)}
   upd();
 }
-function tog(){}
 function upd(){
   document.getElementById('pf').style.width=(done.size/T*100)+'%';
   document.getElementById('cnt').textContent=done.size;
 }
 function cp(btn){
   const t=btn.closest('.cb').querySelector('pre').textContent;
-  navigator.clipboard.writeText(t).then(()=>{
-    btn.textContent='Copied!';btn.classList.add('ok');
-    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('ok')},2000);
-  }).catch(()=>{
-    const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);
-    a.select();document.execCommand('copy');document.body.removeChild(a);
+  doCopy(t).then(()=>{
     btn.textContent='Copied!';btn.classList.add('ok');
     setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('ok')},2000);
   });
+}
+function cl(block){
+  const url=block.querySelector('.lu').textContent;
+  const btn=block.querySelector('.lc');
+  doCopy(url).then(()=>{
+    btn.textContent='Copied!';btn.classList.add('ok');
+    setTimeout(()=>{btn.textContent='Copy URL';btn.classList.remove('ok')},2000);
+  });
+}
+function doCopy(text){
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    return navigator.clipboard.writeText(text).catch(()=>fallback(text));
+  }
+  return Promise.resolve(fallback(text));
+}
+function fallback(text){
+  const ta=document.createElement('textarea');
+  ta.value=text;ta.style.cssText='position:fixed;left:-9999px;top:-9999px';
+  document.body.appendChild(ta);ta.focus();ta.select();
+  try{document.execCommand('copy')}catch(e){}
+  document.body.removeChild(ta);
 }
 </script>
 </body>
