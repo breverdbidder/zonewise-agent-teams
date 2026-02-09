@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZoneWise Agent Teams — Deploy & Run Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1E3A5F;
+    --navy-light: #2A4F7A;
+    --green: #2E7D32;
+    --green-bg: #E8F5E9;
+    --green-border: #A5D6A7;
+    --blue: #1565C0;
+    --blue-bg: #E3F2FD;
+    --blue-border: #90CAF9;
+    --orange-bg: #FFF3E0;
+    --orange-border: #FFCC80;
+    --red-bg: #FFEBEE;
+    --red-border: #EF9A9A;
+    --purple-bg: #F3E5F5;
+    --purple-border: #CE93D8;
+    --gray-50: #FAFAFA;
+    --gray-100: #F5F5F5;
+    --gray-200: #EEEEEE;
+    --gray-300: #E0E0E0;
+    --gray-600: #757575;
+    --gray-800: #424242;
+    --gray-900: #212121;
+    --radius: 10px;
+    --shadow: 0 2px 8px rgba(0,0,0,0.08);
+    --shadow-lg: 0 4px 20px rgba(0,0,0,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-900);
+    line-height: 1.6;
+    padding: 0;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+    color: white;
+    padding: 48px 24px 40px;
+    text-align: center;
+  }
+  .header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+  .header p {
+    font-size: 1rem;
+    opacity: 0.85;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .header .badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Progress Bar */
+  .progress-bar {
+    background: var(--gray-200);
+    height: 6px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .progress-fill {
+    background: linear-gradient(90deg, var(--green), var(--blue));
+    height: 100%;
+    width: 0%;
+    transition: width 0.4s ease;
+    border-radius: 0 3px 3px 0;
+  }
+
+  /* Main */
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+
+  /* Phase Headers */
+  .phase {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    font-weight: 700;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .phase-prereq { background: var(--orange-bg); border-left: 4px solid var(--orange-border); }
+  .phase-install { background: var(--blue-bg); border-left: 4px solid var(--blue-border); }
+  .phase-deploy { background: var(--green-bg); border-left: 4px solid var(--green-border); }
+  .phase-test { background: var(--purple-bg); border-left: 4px solid var(--purple-border); }
+  .phase-run { background: var(--red-bg); border-left: 4px solid var(--red-border); }
+
+  /* Step Card */
+  .step {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .step:hover { border-color: var(--gray-300); box-shadow: var(--shadow-lg); }
+  .step.completed { border-left: 4px solid var(--green); opacity: 0.75; }
+  .step.completed .step-title { text-decoration: line-through; color: var(--gray-600); }
+
+  .step-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .step-checkbox {
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+    border: 2px solid var(--gray-300);
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+    transition: all 0.2s;
+    background: white;
+  }
+  .step-checkbox:hover { border-color: var(--blue); }
+  .step-checkbox.checked {
+    background: var(--green);
+    border-color: var(--green);
+  }
+  .step-checkbox.checked::after {
+    content: '✓';
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .step-number {
+    background: var(--navy);
+    color: white;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .step-content { flex: 1; }
+  .step-title {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 4px;
+    transition: all 0.2s;
+  }
+  .step-desc {
+    font-size: 0.9rem;
+    color: var(--gray-600);
+    line-height: 1.5;
+  }
+
+  /* Code Block */
+  .code-block {
+    background: var(--gray-900);
+    color: #E0E0E0;
+    border-radius: 8px;
+    margin: 12px 0 4px;
+    overflow: hidden;
+    position: relative;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .code-block-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 14px;
+    background: rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-size: 0.75rem;
+    color: var(--gray-600);
+  }
+  .code-block-header .label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .code-block-header .shell-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+  }
+  .code-block-header .shell-dot.red { background: #FF5F56; }
+  .code-block-header .shell-dot.yellow { background: #FFBD2E; }
+  .code-block-header .shell-dot.green { background: #27C93F; }
+
+  .copy-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #aaa;
+    padding: 4px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+  .copy-btn:hover { background: rgba(255,255,255,0.2); color: white; }
+  .copy-btn.copied { background: var(--green); color: white; border-color: var(--green); }
+
+  .code-block pre {
+    padding: 14px 16px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+    line-height: 1.55;
+    white-space: pre;
+  }
+  .code-block code {
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .code-comment { color: #6A9955; }
+  .code-string { color: #CE9178; }
+  .code-keyword { color: #569CD6; }
+  .code-cmd { color: #DCDCAA; }
+
+  /* Links */
+  a.resource-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--blue);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding: 6px 0;
+    transition: color 0.2s;
+  }
+  a.resource-link:hover { color: var(--navy); text-decoration: underline; }
+  a.resource-link::before { content: '🔗'; font-size: 0.8rem; }
+
+  a.github-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--gray-900);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin: 8px 0;
+  }
+  a.github-link:hover { transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+  a.github-link svg { width: 18px; height: 18px; fill: white; }
+
+  /* Info Box */
+  .info-box {
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    margin: 12px 0 4px;
+    line-height: 1.5;
+  }
+  .info-box.tip { background: var(--green-bg); border: 1px solid var(--green-border); }
+  .info-box.warn { background: var(--orange-bg); border: 1px solid var(--orange-border); }
+  .info-box.note { background: var(--blue-bg); border: 1px solid var(--blue-border); }
+
+  /* Stats bar */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 24px 0;
+  }
+  .stat-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-card .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .stat-card .stat-label {
+    font-size: 0.8rem;
+    color: var(--gray-600);
+    margin-top: 2px;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 32px;
+    color: var(--gray-600);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--gray-200);
+    margin-top: 48px;
+  }
+
+  @media (max-width: 640px) {
+    .header h1 { font-size: 1.5rem; }
+    .stats { grid-template-columns: 1fr; }
+    .step { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="badge">CLAUDE CODE · AGENT TEAMS</div>
+  <h1>ZoneWise Agent Teams — Deploy Guide</h1>
+  <p>Step-by-step: install, deploy, validate, and run your first multi-agent county scraper build.</p>
+</div>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<div class="container">
+
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-value" id="completedCount">0</div>
+      <div class="stat-label">Steps Done</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">14</div>
+      <div class="stat-label">Total Steps</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">~15m</div>
+      <div class="stat-label">Est. Time</div>
+    </div>
+  </div>
+
+  <!-- ===== PHASE 1: PREREQUISITES ===== -->
+  <div class="phase phase-prereq">📋 Phase 1 — Prerequisites</div>
+
+  <div class="step" data-step="1">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-checkbox" onclick="event.stopPropagation(); checkStep(this)"></div>
+      <div class="step-number">1</div>
+      <div class="step-content">
+        <div class="step-title">Open WSL Terminal</div>
+        <div class="step-desc">Agent Teams requires Linux. Open PowerShell and launch WSL.</div>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-block-header">
+        <div class="label"><span class="shell-dot red"></span><span class="shell-dot yellow"></span><span class="shell-dot green"></span> PowerShell</div>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code>wsl</code></pre>
+    </div>
+    <div class="info-box note">ℹ️ If WSL isn't installed: <code>wsl --install</code> in Admin PowerShell, then restart.</div>
+  </div>
+
+  <div class="step" data-step="2">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-checkbox" onclick="event.stopPropagation(); checkStep(this)"></div>
+      <div class="step-number">2</div>
+      <div class="step-content">
+        <div class="step-title">Install tmux</div>
+        <div class="step-desc">Terminal multiplexer for split-pane agent visualization.</div>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-block-header">
+        <div class="label"><span class="shell-dot red"></span><span class="shell-dot yellow"></span><span class="shell-dot green"></span> WSL / Bash</div>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code>sudo apt update && sudo apt install tmux -y && tmux -V</code></pre>
+    </div>
+    <div class="info-box tip">✅ Expected output: <code>tmux 3.x</code> — any 3.x version works.</div>
+  </div>
+
+  <div class="step" data-step="3">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-checkbox" onclick="event.stopPropagation(); checkStep(this)"></div>
+      <div class="step-number">3</div>
+      <div class="step-content">
+        <div class="step-title">Verify Claude Code is installed</div>
+        <div class="step-desc">Confirm Claude Code CLI is available in your WSL environment.</div>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-block-header">
+        <div class="label"><span class="shell-dot red"></span><span class="shell-dot yellow"></span><span class="shell-dot green"></span> WSL / Bash</div>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code>claude --version</code></pre>
+    </div>
+    <div class="info-box warn">⚠️ Not installed? Follow → <a href="https://docs.anthropic.com/en/docs/claude-code/getting-started" target="_blank" class="resource-link" style="display:inline;">Claude Code Install Guide</a></div>
+  </div>
+
+  <!-- ===== PHASE 2: INSTALL ===== -->
+  <div class="phase phase-install">📦 Phase 2 — Clone & Install</div>
+
+  <div class="step" data-step="4">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-checkbox" onclick="event.stopPropagation(); checkStep(this)"></div>
+      <div class="step-number">4</div>
+      <div class="step-content">
+        <div class="step-title">Clone the ZoneWise Agent Teams repo</div>
+        <div class="step-desc">Download the skill, commands, and example plans from GitHub.</div>
+      </div>
+    </div>
+    <a href="https://github.com/breverdbidder/zonewise-agent-teams" target="_blank" class="github-link">
+      <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+      breverdbidder/zonewise-agent-teams
+    </a>
+    <div class="code-block">
+      <div class="code-block-header">
+        <div class="label"><span class="shell-dot red"></span><span class="shell-dot yellow"></span><span class="shell-dot green"></span> WSL / Bash</div>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code>cd ~ && git clone https://github.com/breverdbidder/zonewise-agent-teams.git</code></pre>
+    </div>
+  </div>
+
+  <div class="step" data-step="5">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-checkbox" onclick="event.stopPropagation(); checkStep(this)"></div>
+      <div class="step-number">5</div>
+      <div class="step-content">
+        <div class="step-title">Run the one-shot deploy script</div>
+        <div class="step-desc">Installs skill + commands + enables Agent Teams + installs tmux if missing. Zero manual config.</div>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-block-header">
+        <div class="label"><span class="shell-dot red"></span><span class="shell-dot yellow"></span><span class="shell-dot green"></span> WSL / Bash</div>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code>cd ~/zonewise-agent-teams && bash deploy.sh</code></pre>
+    </div>
+    <div class="info-box tip">✅ You should see 5 green checkmarks confirming: skill installed, command installed, settings.json updated, tmux verified, example plans copied.</div>
+  </div>
+
+  <!-- ===== PHASE 3: VERIFY ===== -->
+  <div class="phase phase-deploy">✅ Phase 3 — Verify Installation</div>
+
+  <div class="step" data-step="6">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-checkbox" onclick="event.stopPropagation(); checkStep(this)"></div>
+      <div class="step-number">6</div>
+      <div class="step-content">
+        <div class="step-title">Run the validation script</div>
+        <div class="step-desc">Checks tmux, Claude Code, Agent Teams flag, skill files, Python, Git — all at once.</div>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-block-header">
+        <div class="label"><span class="shell-dot red"></span><span class="shell-dot yellow"></span><span class="shell-dot green"></span> WSL / Bash</div>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code>bash ~/zonewise-agent-teams/tests/validate-skill-install.sh</code></pre>
+    </div>
+    <div class="info-box tip">✅ Target: <strong>8 passed, 0 failed, 0 warnings</strong>. Fix any failures before proceeding.</div>
+  </div>
+
+  <div class="step" data-step="7">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-checkbox" onclick="event.stopPropagation(); checkStep(this)"></div>
+      <div class="step-number">7</div>
+      <div class="step-content">
+        <div class="step-title">Verify skill file is in place</div>
+        <div class="step-desc">Confirm the main SKILL.md is readable by Claude Code.</div>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-block-header">
+        <div class="label"><span class="shell-dot red"></span><span class="shell-dot yellow"></span><span class="shell-dot green"></span> WSL / Bash</div>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code>cat ~/.claude/skills/build-with-agent-team/SKILL.md | head -5</code></pre>
+    </div>
+    <div class="info-box note">ℹ️ Should show the YAML frontmatter: <code>name: build-with-agent-team</code></div>
+  </div>
+
+  <div class="step" data-step="8">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-checkbox" onclick="event.stopPropagation(); checkStep(this)"></div>
+      <div class="step-number">8</div>
+      <div class="step-content">
+        <div class="step-title">Verify settings.json has Agent Teams enabled</div>
+        <div class="step-desc">The experimental flag must be set for Claude Code to use Agent Teams.</div>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-block-header">
+        <div class="label"><span class="shell-dot red"></span><span class="shell-dot yellow"></span><span class="shell-dot green"></span> WSL / Bash</div>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code>cat ~/.claude/settings.json | python3 -m json.tool</code></pre>
+    </div>
+    <div class="info-box note">ℹ️ Must contain: <code>"CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"</code></div>
+  </div>
+
+  <!-- ===== PHASE 4: TEST ===== -->
+  <div class="phase phase-test">🧪 Phase 4 — Test Run</div>
+
+  <div class="step" data-step="9">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-checkbox" onclick="event.stopPropagation(); checkStep(this)"></div>
+      <div class="step-number">9</div>
+      <div class="step-content">
+        <div class="step-title">Navigate to the zonewise-modal repo</div>
+        <div class="step-desc">Agent Teams runs in the context of a project repo. Use your scraper repo.</div>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-block-header">
+        <div class="label"><span class="shell-dot red"></span><span class="shell-dot yellow"></span><span class="shell-dot green"></span> WSL / Bash</div>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code>cd ~/zonewise-modal</code></pre>
+    </div>
+    <div class="info-box warn">⚠️ If repo isn't cloned yet: <code>git clone https://github.com/breverdbidder/zonewise-modal.git ~/zonewise-modal</code></div>
+  </div>
+
+  <div class="step" data-step="10">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-checkbox" onclick="event.stopPropagation(); checkStep(this)"></div>
+      <div class="step-number">10</div>
+      <div class="step-content">
+        <div class="step-title">Start Claude Code inside tmux</div>
+        <div class="step-desc">Agent Teams needs tmux running. Start a tmux session first, then launch Claude Code inside it.</div>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-block-header">
+        <div class="label"><span class="shell-dot red"></span><span class="shell-dot yellow"></span><span class="shell-dot green"></span> WSL / Bash</div>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code><span class="code-comment"># Start tmux session named "zonewise"</span>
+tmux new-session -s zonewise
+
+<span class="code-comment"># Inside tmux, launch Claude Code</span>
+claude</code></pre>
+    </div>
+    <div class="info-box warn">⚠️ You <strong>must</strong> be inside a tmux session for split-pane agents to spawn. If you run <code>claude</code> outside tmux, agents will run headless (no visual panes).</div>
+  </div>
+
+  <div class="step" data-step="11">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-checkbox" onclick="event.stopPropagation(); checkStep(this)"></div>
+      <div class="step-number">11</div>
+      <div class="step-content">
+        <div class="step-title">Test the build-with-agent-team skill (dry run)</div>
+        <div class="step-desc">Use the example Orange County plan to verify the skill loads and team spawning works.</div>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-block-header">
+        <div class="label"><span class="shell-dot red"></span><span class="shell-dot yellow"></span><span class="shell-dot green"></span> Claude Code</div>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code>/build-with-agent-team ~/zonewise-plans/orange-county-scraper-plan.md 3</code></pre>
+    </div>
+    <div class="info-box tip">✅ Watch for: tmux splits into 3 panes. Lead agent reads the plan, spawns Schema Agent first, waits for contract, then spawns Scraper + Test agents.</div>
+  </div>
+
+  <!-- ===== PHASE 5: PRODUCTION ===== -->
+  <div class="phase phase-run">🚀 Phase 5 — Production Use</div>
+
+  <div class="step" data-step="12">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-checkbox" onclick="event.stopPropagation(); checkStep(this)"></div>
+      <div class="step-number">12</div>
+      <div class="step-content">
+        <div class="step-title">Build your first county scraper (fast-track)</div>
+        <div class="step-desc">The <code>/build-county-scraper</code> command auto-generates a plan and spawns 3 agents. Just provide the county name.</div>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-block-header">
+        <div class="label"><span class="shell-dot red"></span><span class="shell-dot yellow"></span><span class="shell-dot green"></span> Claude Code</div>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code><span class="code-comment"># Build Orange County scraper (first expansion target)</span>
+/build-county-scraper orange
+
+<span class="code-comment"># Or with explicit URL</span>
+/build-county-scraper orange https://orange.realforeclose.com</code></pre>
+    </div>
+    <div class="info-box note">ℹ️ This auto-generates the full plan internally, then runs the same contract-first flow: Schema → Scraper → Test.</div>
+  </div>
+
+  <div class="step" data-step="13">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-checkbox" onclick="event.stopPropagation(); checkStep(this)"></div>
+      <div class="step-number">13</div>
+      <div class="step-content">
+        <div class="step-title">Build subsequent counties</div>
+        <div class="step-desc">Repeat for each county in the 67-county expansion. Same command, different county name.</div>
+      </div>
+    </div>
+    <div class="code-block">
+      <div class="code-block-header">
+        <div class="label"><span class="shell-dot red"></span><span class="shell-dot yellow"></span><span class="shell-dot green"></span> Claude Code</div>
+        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+      <pre><code><span class="code-comment"># Duval County (Jacksonville)</span>
+/build-county-scraper duval
+
+<span class="code-comment"># Hillsborough County (Tampa)</span>
+/build-county-scraper hillsborough
+
+<span class="code-comment"># Miami-Dade County</span>
+/build-county-scraper miami-dade
+
+<span class="code-comment"># Custom plan for complex builds</span>
+/build-with-agent-team ./plans/palm-beach-feature.md 4</code></pre>
+    </div>
+  </div>
+
+  <div class="step" data-step="14">
+    <div class="step-header" onclick="toggleStep(this)">
+      <div class="step-checkbox" onclick="event.stopPropagation(); checkStep(this)"></div>
+      <div class="step-number">14</div>
+      <div class="step-content">
+        <div class="step-title">Write custom plans for non-scraper builds</div>
+        <div class="step-desc">For new pipeline stages, API features, or UI components — write a plan doc and use the general command.</div>
+      </div>
+    </div>
+    <div class="info-box note">ℹ️ Use <code>~/zonewise-plans/orange-county-scraper-plan.md</code> as a template. Key sections: Objective, Tech Stack, Data Contract, Agent Team, Contract Chain, Validation, Acceptance Criteria.</div>
+    <div style="margin-top:12px;">
+      <a href="https://github.com/breverdbidder/zonewise-agent-teams/blob/main/example-plans/orange-county-scraper-plan.md" target="_blank" class="resource-link">View Orange County example plan on GitHub</a><br>
+      <a href="https://github.com/coleam00/context-engineering-intro/tree/main/use-cases/build-with-agent-team" target="_blank" class="resource-link">Cole Medin's original skill (reference)</a><br>
+      <a href="https://docs.anthropic.com/en/docs/claude-code" target="_blank" class="resource-link">Claude Code documentation</a><br>
+      <a href="https://github.com/breverdbidder/zonewise-agent-teams" target="_blank" class="resource-link">Full ZoneWise Agent Teams repo</a>
+    </div>
+  </div>
+
+  <!-- Quick Reference -->
+  <div class="phase" style="background: var(--gray-100); border-left: 4px solid var(--gray-300); margin-top: 48px;">⚡ Quick Reference — Commands</div>
+
+  <div style="background: white; border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 20px 24px; box-shadow: var(--shadow);">
+    <table style="width: 100%; font-size: 0.9rem; border-collapse: collapse;">
+      <tr style="border-bottom: 1px solid var(--gray-200);">
+        <td style="padding: 10px 0; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--blue);">/build-county-scraper orange</td>
+        <td style="padding: 10px 0; color: var(--gray-600);">3-agent scraper build for Orange County</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--gray-200);">
+        <td style="padding: 10px 0; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--blue);">/build-with-agent-team plan.md</td>
+        <td style="padding: 10px 0; color: var(--gray-600);">General build from any plan doc (auto team size)</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--gray-200);">
+        <td style="padding: 10px 0; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--blue);">/build-with-agent-team plan.md 4</td>
+        <td style="padding: 10px 0; color: var(--gray-600);">Build with exactly 4 agents</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 0; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--blue);">tmux new-session -s zonewise</td>
+        <td style="padding: 10px 0; color: var(--gray-600);">Start tmux session (required before claude)</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="phase" style="background: var(--gray-100); border-left: 4px solid var(--gray-300); margin-top: 24px;">🔑 Key tmux Shortcuts</div>
+
+  <div style="background: white; border: 1px solid var(--gray-200); border-radius: var(--radius); padding: 20px 24px; box-shadow: var(--shadow);">
+    <table style="width: 100%; font-size: 0.9rem; border-collapse: collapse;">
+      <tr style="border-bottom: 1px solid var(--gray-200);">
+        <td style="padding: 10px 0; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; font-weight: 500;">Ctrl+B, then D</td>
+        <td style="padding: 10px 0; color: var(--gray-600);">Detach from tmux (agents keep running)</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--gray-200);">
+        <td style="padding: 10px 0; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; font-weight: 500;">tmux attach -t zonewise</td>
+        <td style="padding: 10px 0; color: var(--gray-600);">Reattach to session</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--gray-200);">
+        <td style="padding: 10px 0; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; font-weight: 500;">Ctrl+B, then Arrow keys</td>
+        <td style="padding: 10px 0; color: var(--gray-600);">Switch between agent panes</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 0; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; font-weight: 500;">tmux kill-session -t zonewise</td>
+        <td style="padding: 10px 0; color: var(--gray-600);">Kill session when done</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="footer">
+    ZoneWise Agent Teams · Adapted from <a href="https://github.com/coleam00/context-engineering-intro" target="_blank" style="color: var(--blue);">Cole Medin's Context Engineering</a><br>
+    <a href="https://github.com/breverdbidder/zonewise-agent-teams" target="_blank" style="color: var(--blue);">GitHub Repo</a> · Everest Capital USA · Feb 2026
+  </div>
+
+</div>
+
+<script>
+  const TOTAL_STEPS = 14;
+  let completedSteps = new Set();
+
+  // Load saved state
+  try {
+    const saved = localStorage.getItem('zonewise-agent-teams-progress');
+    if (saved) {
+      JSON.parse(saved).forEach(s => completedSteps.add(s));
+      completedSteps.forEach(stepNum => {
+        const el = document.querySelector(`.step[data-step="${stepNum}"]`);
+        if (el) {
+          el.classList.add('completed');
+          el.querySelector('.step-checkbox').classList.add('checked');
+        }
+      });
+      updateProgress();
+    }
+  } catch(e) {}
+
+  function checkStep(checkbox) {
+    const step = checkbox.closest('.step');
+    const stepNum = parseInt(step.dataset.step);
+
+    if (checkbox.classList.contains('checked')) {
+      checkbox.classList.remove('checked');
+      step.classList.remove('completed');
+      completedSteps.delete(stepNum);
+    } else {
+      checkbox.classList.add('checked');
+      step.classList.add('completed');
+      completedSteps.add(stepNum);
+    }
+    updateProgress();
+    saveState();
+  }
+
+  function toggleStep(header) {
+    // No-op for now, could add expand/collapse
+  }
+
+  function updateProgress() {
+    const pct = (completedSteps.size / TOTAL_STEPS) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('completedCount').textContent = completedSteps.size;
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem('zonewise-agent-teams-progress', JSON.stringify([...completedSteps]));
+    } catch(e) {}
+  }
+
+  function copyCode(btn) {
+    const pre = btn.closest('.code-block').querySelector('pre');
+    const text = pre.textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 2000);
+    }).catch(() => {
+      // Fallback
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+</script>
+
+</body>
+</html>
